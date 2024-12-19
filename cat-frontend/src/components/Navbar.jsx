@@ -1,11 +1,23 @@
 import React, { useState } from 'react';
-import { FaBars } from "react-icons/fa";
 import { RiMenu2Line, RiMenuFold2Line } from "react-icons/ri";
+import { MdLogout} from "react-icons/md";
 import { navItems } from '@/utils/constants/nav-items';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+
+import {clearLoggedInUserInfo} from "@/redux/auth/authSlice"
+import localStorageService from "@/utils/helper/localStorageService";
+import { authConstants } from "@/utils/constants/auth";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(clearLoggedInUserInfo());
+    localStorageService.removeItem(authConstants.AUTH);
+    // navigate(routesConstant.login);
+  }
 
   return (
     <nav className="bg-base-100 shadow-md">
@@ -23,6 +35,17 @@ const Navbar = () => {
               </Link>
             </div>
           ))}
+          <button
+              className="btn btn-outline"
+              onClick={handleLogout}
+            >
+              <h2 className={`whitespace-pre duration-500 opacity-100`}>
+                Logout
+              </h2>
+              <div>
+                <MdLogout size={20} />
+              </div>
+            </button>
         </div>
 
         {/* Mobile Menu Button */}
@@ -44,6 +67,17 @@ const Navbar = () => {
               </Link>
             </div>
           ))}
+          <button
+              className="flex items-center self-start text-md gap-1 p-2 hover:bg-gray-200 rounded-md"
+              onClick={handleLogout}
+            >
+              <h2 className={`whitespace-pre duration-500 opacity-100`}>
+                Logout
+              </h2>
+              <div className='inline-flex'>
+                <MdLogout size={20} />
+              </div>
+            </button>
         </div>
       )}
     </nav>
