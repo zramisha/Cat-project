@@ -6,6 +6,12 @@ export const mainLayoutSlice = createSlice({
     isNavbarMenuOpen: false,
   },
   reducers: {
+    toggleSidebar: (state) => {
+      state.isSidebarOpen = !state.isSidebarOpen;
+    },
+    toggleMobileMenu: (state) => {
+      state.isMenuOpen = !state.isMenuOpen;
+    },
     toggleNavbarMenu: (state) => {
       state.isNavbarMenuOpen = !state.isNavbarMenuOpen;
     }
@@ -13,6 +19,6 @@ export const mainLayoutSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {toggleNavbarMenu} = mainLayoutSlice.actions;
+export const { toggleSidebar, toggleMobileMenu, toggleNavbarMenu} = mainLayoutSlice.actions;
 
 export default mainLayoutSlice.reducer;
