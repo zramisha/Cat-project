@@ -11,6 +11,9 @@ const MainLayout = lazy(()=> import("@/layouts/main-layout"))
 const ErrorPage = lazy(()=> import("@/components/error-page"))
 const Home = lazy(() => import("@/pages/main/home"));
 const Login = lazy(() => import("@/pages/auth/login"));
+const Cats = lazy(() => import("@/pages/main/cats"));
+const CatPosts = lazy(()=> import("@/pages/main/catposts"));
+const CatPostDetails = lazy(()=> import("@/components/CatPostDetails"));
 
 
 
@@ -38,10 +41,18 @@ export const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <Home /> },
-      // {
-      //   path: routesConstant.contactUs,
-      //   element: <ContactUs />,
-      // },
+      {
+        path: routesConstant.exploreCats,
+        element: <Cats />,
+      },
+      {
+        path: routesConstant.catPosts,
+        element: <CatPosts />,
+      },
+      {
+        path: `${routesConstant.catPosts}/:id`,
+        element: <CatPostDetails />,
+      },
     ],
   },
 ]);
