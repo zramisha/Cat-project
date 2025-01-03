@@ -29,9 +29,9 @@ const Login = () => {
       const from = location.state?.from?.pathname || "/";
       navigate(from, { replace: true });
     }
-  }, [data, responseError, navigate]);
+  }, [data, responseError, navigate, location.state?.from?.pathname]);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email.length) {
       setEmailError("Please Enter your email");
     }
@@ -44,10 +44,16 @@ const Login = () => {
       return;
     }
 
-    login({
-      email,
-      password,
-    });
+    try {
+    
+      await login({
+        email,
+        password,
+      });
+    } catch (error) {
+        console.login("Login Failed");
+        console.error(error)
+    }
   };
 
   
