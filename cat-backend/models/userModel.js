@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema(
     username: {
       type: String,
       required: [true, "username is required"],
-      unique: true
+      unique: true,
     },
     firstName: {
       type: String,
@@ -29,6 +29,41 @@ const userSchema = new mongoose.Schema(
       minlength: [6, "password should be atleast 6 character"],
       select: true,
     },
+    type: {
+      type: String,
+      enum: ["admin", "shelterOwner", "default"],
+    },
+    contact: {
+      type: String,
+      required: true,
+    },
+    wishlist: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "CatPost",
+      },
+    ], // Tracks posts the user added to their wishlist
+    requests: [
+      {
+        post: { type: mongoose.Schema.Types.ObjectId, ref: "CatPost" },
+        type: {
+          type: String,
+          enum: ["adoption", "purchase"], // Derived from CatPost's postType
+        },
+        status: {
+          type: String,
+          enum: ["pending", "approved", "rejected"], // Specific to the user's request
+          default: "pending",
+        },
+        message: { type: String }, // Optional message from the user
+      },
+    ], // Unified list of adoption/purchase requests
+    catPosts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "CatPost",
+      },
+    ], // Posts created by the user
   },
   { timestamps: true }
 );
@@ -36,21 +71,30 @@ const userSchema = new mongoose.Schema(
 // middlewares: //
 //for password hashing
 userSchema.pre("save", async function (next) {
-  if (!this.isModified('password')) return next();
+  if (!this.isModified("password")) return next();
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
-// for password checking 
+// for password checking
 userSchema.methods.comparPassword = async function (userPassword) {
-  const isMatched = await bcrypt.compare(userPassword, this.password)
+  const isMatched = await bcrypt.compare(userPassword, this.password);
   return isMatched;
-}
+};
 
 // JSON webtoken
 userSchema.methods.createJWT = function () {
-  return JWT.sign({ userid: this._id, email: this.email, username: this.username }, process.env.JWT_SECRET, {
-    expiresIn: "1d",
-  });
+  return JWT.sign(
+    {
+      userid: this._id,
+      email: this.email,
+      username: this.username,
+      type: this.type,
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: "7d",
+    }
+  );
 };
 
 export default mongoose.model("User", userSchema);
