@@ -6,7 +6,7 @@ export const getById = async (req, res, next) => {
   try {
     const { id } = req.params;
 
-    const cat = await Cat.findById(id);
+    const cat = await Cat.findById(id).populate("createdBy", "username email contact -password").exec();
     if (!cat) {
         return res.status(404).json({ success: false, error: 'No such Cat found in the database' });
     }
