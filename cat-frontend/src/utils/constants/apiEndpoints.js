@@ -1,7 +1,8 @@
-const baseEndpoints = {
+export const baseEndpoints = {
     auth: "/api/v1/auth",
     cats: "/api/v1/cats",
-    users: "/api/v1/users"
+    users: "/api/v1/users",
+    catPosts: "/api/v1/cat-posts",
   }
   
   
