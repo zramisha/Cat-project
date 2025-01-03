@@ -29,11 +29,11 @@ const Navbar = () => {
         {/* Desktop Menu */}
         <div className="hidden md:flex space-x-4">
           {navItems?.map((navItem, index) => (
-            <div key={index} className='btn btn-ghost'>
-              <Link to={navItem.link}>
-                {navItem.name}
-              </Link>
-            </div>
+            <Link to={navItem.link} key={index}>
+              <div  className='btn btn-ghost'>
+                  {navItem.name}
+              </div>
+            </Link>
           ))}
           <button
               className="btn btn-outline"
