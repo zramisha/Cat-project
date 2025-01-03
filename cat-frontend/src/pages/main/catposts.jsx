@@ -2,7 +2,6 @@ import React from "react";
 import { useGetAllCatPostsQuery } from "@/redux/catPost/catPostApi";
 import DefaultLoader from "@/components/loader/deafult-loader";
 import CatPostCard from "@/components/CatPostCard";
-import { Blog } from "@/components/BlogCard";
 
 export default function CatPosts() {
   // API calling
