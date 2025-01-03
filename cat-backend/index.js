@@ -3,6 +3,7 @@ import express from "express";
 import dotenv from "dotenv";
 import colors from "colors";
 import morgan from "morgan";
+import cors from "cors";
 //file imports
 import connectDB from "./config/db.js";
 import errorMiddleware from "./middlewares/errorMiddleware.js";
@@ -21,6 +22,7 @@ const app = express();
 
 // ---- Middlewares--- //
 app.use(express.json())
+app.use(cors());
 app.use(morgan("dev"));
 
 // ------ Routes ------ //

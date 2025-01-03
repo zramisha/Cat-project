@@ -5,12 +5,8 @@ import Cat from "../../models/catModel.js"
 export const getAll = async (req, res, next) => {
   try {
 
-    // const cats = await Cat.find().populate({
-    //   path: 'shelterOwner',
-    //   model: 'User',
-    // });
 
-    const cats = await Cat.find();
+    const cats = await Cat.find().populate("createdBy", "username email contact -password").exec();
 
 
     res.status(200).send({
