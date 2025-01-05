@@ -7,6 +7,7 @@ import catRoutes from "./catRoutes.js"
 import catPostRoutes from "./catPostRoutes.js";
 import shelterRoutes from "./shelterRoutes.js";
 import eventRoutes from "./eventRoutes.js";
+import userRoutes from "./userRoutes.js";
 
 
 const router = express.Router();
@@ -19,5 +20,6 @@ router.use(`${path}cats`, catRoutes);
 router.use(`${path}cat-posts`, catPostRoutes);
 router.use(`${path}shelters`, shelterRoutes);
 router.use(`${path}events`, eventRoutes);
+router.use(`${path}users`, userRoutes);
 
 export default router;
