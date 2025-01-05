@@ -3,6 +3,8 @@ export const baseEndpoints = {
     cats: "/api/v1/cats",
     users: "/api/v1/users",
     catPosts: "/api/v1/cat-posts",
+    shelters: "/api/v1/shelters",
+    events: "/api/v1/events",
   }
   
   
