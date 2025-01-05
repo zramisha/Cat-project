@@ -3,6 +3,7 @@ export const routesConstant = {
   profile: "profile",
   wishList: "wishlist",
   exploreCats: "explore-cats",
-  catPosts: "cat-posts"
+  catPosts: "cat-posts",
+  shelters: "shelters",
 
 }
