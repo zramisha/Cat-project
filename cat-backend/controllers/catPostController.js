@@ -118,47 +118,74 @@ export const deleteCatPost = async (req, res, next) => {
 // PATCH /catPosts/:postId/requests - Add a request to a cat post
 
 export const addRequestToPost = async (req, res) => {
-    const { id } = req.params; // postId
-    const userId = req.user.userid;
-    const { type } = req.body; // Expect 'adoption' or 'purchase'
-  
-    if (!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({ success: false, message: "Invalid ID format" });
+  const { id } = req.params; // postId
+  const userId = req.user.userid;
+  const { type } = req.body; // Expect 'adoption' or 'purchase'
+
+  if (
+    !mongoose.Types.ObjectId.isValid(id) ||
+    !mongoose.Types.ObjectId.isValid(userId)
+  ) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Invalid ID format" });
+  }
+
+  try {
+    const post = await CatPost.findById(id);
+    const user = await User.findById(userId);
+
+    if (!post || !user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Post or User not found" });
     }
-  
-    try {
-      const post = await CatPost.findById(id);
-      const user = await User.findById(userId);
-  
-      if (!post || !user) {
-        return res.status(404).json({ success: false, message: "Post or User not found" });
-      }
-  
-      if (post.currentOwner.toString() === userId.toString()) {
-        return res.status(400).json({ success: false, message: "Cannot request your own post" });
-      }
-  
-      // Create the request object
-      const newRequest = {
-        user: userId,
-        status: 'pending',
-        type: type
-      };
-  
-      // Add request to the CatPost
-      post.requests.push(newRequest);
-      await post.save();
-  
-      // Add the same request to the User's requests list
-      user.requests.push({
-        post: id,
-        type: type,
-        status: 'pending', // Default status
+
+    if (post.currentOwner.toString() === userId.toString()) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Cannot request your own post" });
+    }
+
+    // Check if the user has already made a request
+    if (
+      post.requests.some(
+        (request) => request.user.toString() === req.user._id.toString()
+      )
+    ) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Request already made" });
+    }
+
+    // Create the request object
+    const newRequest = {
+      user: userId,
+      status: "pending",
+      type: type,
+    };
+
+    // Add request to the CatPost
+    post.requests.push(newRequest);
+    await post.save();
+
+    // Add the same request to the User's requests list
+    user.requests.push({
+      post: id,
+      type: type,
+      status: "pending", // Default status
+    });
+    await user.save();
+
+    res
+      .status(200)
+      .json({
+        success: true,
+        message: "Request added successfully",
+        post,
+        user,
       });
-      await user.save();
-  
-      res.status(200).json({ success: true, message: "Request added successfully", post, user });
-    } catch (error) {
-      res.status(500).json({ success: false, message: error.message });
-    }
-  };
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
