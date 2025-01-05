@@ -17,7 +17,8 @@ export const navItems = [
     { name: "Profile", link: routesConstant.profile,  },
     { name: "Explore Cats", link: routesConstant.exploreCats, },
     {name: "Cat Posts", link: routesConstant.catPosts},
-    { name: "Wishlist", link: routesConstant.wishList, },
-    { name: "Setting", link: "/",  },
+    {name: "Shelters", link: routesConstant.shelters},
+    {name: "Events", link: routesConstant.events},
+    { name: "Wishlist", link: routesConstant.profile, },
 
   ];
