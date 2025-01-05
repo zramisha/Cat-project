@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
@@ -55,14 +56,14 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 1 }}
         >
-          <button className="px-6 py-3 bg-yellow-300 text-blue-700 rounded-lg shadow-lg hover:bg-yellow-400 transition">
+          <Link className="px-6 py-3 bg-yellow-300 text-blue-700 rounded-lg shadow-lg hover:bg-yellow-400 transition" to={"cat-posts"}>
             Browse Cats
-          </button>
-          <button className="px-6 py-3 bg-white text-blue-700 rounded-lg shadow-lg hover:bg-gray-200 transition">
-            Learn More
-          </button>
+          </Link>
+          <Link className="px-6 py-3 bg-white text-blue-700 rounded-lg shadow-lg hover:bg-gray-200 transition" to={"shelters"}>
+            Explore Shelters
+          </Link>
         </motion.div>
-      </div>
+      </div> 
     </div>
   );
 };
