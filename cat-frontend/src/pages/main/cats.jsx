@@ -1,30 +1,40 @@
 import { useState, useEffect } from "react";
-import { generateCats, dummyCats } from "@/utils/helper/generateRandomCats";
 import CatCard from "@/components/CatCard";
+import DefaultLoader from "@/components/loader/deafult-loader";
+import { useGetAllCatsQuery } from "@/redux/cat/catApi";
 
 const Cats = () => {
-  const [cats, setCats] = useState([]);
+  // API calling
+  const { data, error, isLoading } = useGetAllCatsQuery();
 
-  useEffect(() => {
-    // Generate the initial batch of cats
-    const generatedCats = generateCats(15);
-    setCats(generatedCats);
-    // setCats(dummyCats)
-  }, []);
+  if (isLoading) return <DefaultLoader />;
 
-  const handleGenerateCats = () => {
-    const generatedCats = generateCats(10);
-    setCats(generatedCats);
-  };
+  if (error) {
+    const errorMessage = error?.data?.message || "An error occurred";
+    return (
+      <p className="text-red-400">Error fetching cat posts: {errorMessage}</p>
+    );
+  }
+  // Extract cats safely
+  const cats = data?.cats;
+  console.log(data);
 
   return (
     <div className="mx-auto">
       <h1>Cat List</h1>
-      <button onClick={handleGenerateCats} type="button" className="btn btn-outline">Regenerate Cats</button>
+      {/* <button onClick={handleGenerateCats} type="button" className="btn btn-outline">Regenerate Cats</button> */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 mt-5 mx-auto items-center justify-around">
-        {cats.map((cat, index) => (
-          <CatCard key={index} cat={cat}/>
-        ))}
+        {/* Ensure Cat exists before mapping */}
+        {cats && cats.length > 0 ? (
+          cats?.map((cat, index) => (
+            <CatCard
+              key={index}
+              cat={cat}
+            />
+          ))
+        ) : (
+          <p>No cat posts available.</p>
+        )}
       </div>
     </div>
   );
