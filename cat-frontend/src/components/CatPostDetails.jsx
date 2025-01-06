@@ -1,11 +1,34 @@
 import React from "react";
-import { useParams } from "react-router-dom"; // For React Router
-import { useGetCatPostByIdQuery } from "@/redux/catPost/catPostApi"; // Assuming you have this query set up
+import { Link, useParams } from "react-router-dom"; // For React Router
+import { useGetCatPostByIdQuery, useAddRequestToPostMutation } from "@/redux/catPost/catPostApi"; // Assuming you have this query set up
 import DefaultLoader from "@/components/loader/deafult-loader";
+import { toast } from 'react-toastify';
+import { useAddToWishListMutation } from "@/redux/user/userApi";
 
 const CatPostDetails = () => {
   const { id } = useParams(); // Get the post ID from the URL
   const { data, error, isLoading } = useGetCatPostByIdQuery(id); // Fetch the specific post
+  const [addRequest, { isLoading: isRequestLoading, isSuccess }] = useAddRequestToPostMutation();
+  const [addToWishList, { isLoading: isWishlistLoading, isAddToWishSuccess }] = useAddToWishListMutation();
+
+
+  const handleRequest = async () => {
+    try {
+      await addRequest({ postId: id, type: postType }).unwrap();
+      toast.success('Request sent successfully!');
+    } catch (err) {
+      toast.error(`Failed to send request: You might have alreay requested`);
+    }
+  };
+
+  const handleAddToWishLilst = async () => {
+    try {
+      await addToWishList({ postId: id}).unwrap();
+      toast.success('Added To Wishlist');
+    } catch (err) {
+      toast.error(`Failed to add to wishlist`);
+    }
+  };
 
   if (isLoading) return <DefaultLoader />;
   if (error) {
@@ -27,7 +50,7 @@ const CatPostDetails = () => {
     requests,
   } = catPost;
 
-  // console.log(cat);
+  // console.log(catPost);
 
   return (
     <div className="px-4 py-5 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-12">
@@ -96,10 +119,21 @@ const CatPostDetails = () => {
             <h4 className="text-base font-semibold">Cat Description</h4>
             <p className="mb-4 text-base text-gray-700">{cat.description}</p>
           </div>
+          <div>
+            <h4 className="text-base font-semibold">Current Owner</h4>
+            <Link to={`/user/${catPost.currentOwner._id}`} className="mb-4 text-base text-gray-700">{catPost.currentOwner.username}</Link>
+          </div>
         </div>
-        <button className="btn btn-secondary">
-          Want to {postType === "adoption" ? "Adopt" : "Buy"}
-        </button>
+
+        {/* action */}
+        <div className="flex justify-around">
+          <button className="btn btn-secondary" onClick={handleRequest} disabled={isRequestLoading}>
+            Want to {postType === "adoption" ? "Adopt" : "Buy"}
+          </button>
+          <button className="btn btn-outline" onClick={handleAddToWishLilst} disabled={isWishlistLoading}>
+            Add to Wishlist
+          </button>
+        </div>
       </div>
     </div>
   );
