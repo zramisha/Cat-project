@@ -37,7 +37,7 @@ const CatCard = ({ cat }) => {
           {/* conditional rendering or based on props */}
           <div className="card-actions justify-between mt-3">
             {/* <button className="btn btn-sm btn-primary" type="button" onClick={()=> handleAdopt(cat)} disabled={!isAvailable}>{isAvailable ? "Want to Adopt": "Adopted"}</button> */}
-            <button className="btn btn-sm btn-warning" type="button" onClick={()=>handleWishlist(cat)}> Add to Wish List</button>
+            {/* <button className="btn btn-sm btn-warning" type="button" onClick={()=>handleWishlist(cat)}> Add to Wish List</button> */}
           </div>
         </div>
 

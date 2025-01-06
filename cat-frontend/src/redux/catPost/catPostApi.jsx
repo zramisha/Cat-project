@@ -21,6 +21,13 @@ export const catPostApi = apiSlice.injectEndpoints({
       }),
       providesTags: ["CatPost"], // Cache the list of Bank accounts
     }),
+    getCatPostsByUserId: builder.query({
+      query: (id) => ({
+        url: `${baseEndpoints.catPosts}/${id}`,
+        method: "GET",
+      }),
+      providesTags: ["CatPost"], // Cache the list of Bank accounts
+    }),
     getAllCatPosts: builder.query({
       query: () => ({
         url: `${baseEndpoints.catPosts}`,
@@ -38,18 +45,31 @@ export const catPostApi = apiSlice.injectEndpoints({
     updateCatPost: builder.mutation({
       query: ({ id, data }) => ({
         url: `${baseEndpoints.catPosts}/${id}`,
-        method: "POST",
+        method: "PATCH",
         body: data,
       }),
       invalidatesTags: ["CatPost"],
+    }),
+    addRequestToPost: builder.mutation({
+      query: ({ postId, request }) => ({
+        url: `${baseEndpoints.catPosts}/${postId}/requests`,
+        method: "PATCH",
+        body: request,
+      }),
+      invalidatesTags: (result, error, { postId }) => [
+        { type: "CatPost", id: postId },
+      ],
     }),
   }),
 });
 
 
 
-export const { 
+export const {
     useCreateCatPostMutation,
     useGetCatPostByIdQuery,
     useGetAllCatPostsQuery,
- } = catPostApi;
+    useDeleteCatPostMutation,
+    useUpdateCatPostMutation,
+    useAddRequestToPostMutation,
+} = catPostApi;

@@ -19,7 +19,12 @@ export const userApi = apiSlice.injectEndpoints({
           { type: "CatPost", id: postId },{type: "User"}
         ],
       }),
-    // Additional user-related endpoints can be defined here
+      // Additional user-related endpoints can be defined here
+    
+    getUserCats: builder.query({
+      query: (id) => `${baseEndpoints.users}/${id}/cats`,
+      providesTags: (result, error, id) => [{ type: "User", id }],
+    }),
   }),
   overrideExisting: false,
 });
@@ -27,4 +32,5 @@ export const userApi = apiSlice.injectEndpoints({
 export const {
     useGetUserByIdQuery,
     useAddToWishListMutation,
+    useGetUserCatsQuery,
 } = userApi;
