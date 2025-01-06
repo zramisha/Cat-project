@@ -1,6 +1,7 @@
 import User from "../models/userModel.js";
 import mongoose from "mongoose";
 import CatPost from '../models/catPostModel.js';
+import Cat from "../models/catModel.js";
 
 // Get a single user by ID
 export const getUserById = async (req, res) => {
@@ -17,7 +18,7 @@ export const getUserById = async (req, res) => {
       .select("-password") // Exclude the password from the result
       .populate("wishlist", "postTitle description") // Assuming 'title' and 'description' fields in CatPost
       .populate("requests.post", "postTitle status") // Including the title and status of the CatPost
-      .populate("catPosts", "title createdAt"); // Just as an example, modify as needed for your schema
+      .populate("catPosts", "postTitle createdAt"); // Just as an example, modify as needed for your schema
 
     if (!user) {
       return res
@@ -64,5 +65,26 @@ export const addToWishlist = async (req, res) => {
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
+};
+
+
+export const getUserCats = async (req, res) => {
+    const {userid} = req.params; 
+
+    try {
+
+        const cats = await Cat.find({ createdBy: userid });
+
+        res.status(200).json({
+            success: true,
+            count: cats.length,
+            data: cats
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch cats due to an error: ' + error.message
+        });
+    }
 };
 

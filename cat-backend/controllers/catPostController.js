@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 export const createCatPost = async (req, res, next) => {
   try {
     const { postTitle, cat, postType, message, price } = req.body;
+    const userId = req.user.userid
 
     // Ensure the cat exists
     const existingCat = await Cat.findById(cat);
@@ -26,6 +27,14 @@ export const createCatPost = async (req, res, next) => {
       message,
       price: (postType === "sell" ? price : null),
     });
+      
+    // Add the new cat post to the user's list of cat posts
+    const user = await User.findById(userId);
+    if (!user) {
+        return res.status(404).json({ success: false, message: "User not found" });
+    }
+    user.catPosts.push(newPost._id);
+    await user.save();
 
     res.status(201).json({
       success: true,
