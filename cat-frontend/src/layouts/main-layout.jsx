@@ -2,6 +2,7 @@ import React, { lazy } from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import NavbarAlt from "@/components/NavbarAlt";
 
 
 
@@ -10,7 +11,8 @@ const MainLayout = () => {
     <div className="grid grid-cols-[auto_1fr] w-full min-h-screen grid-rows-[auto_1fr]">
       <div className="col-span-2 sticky top-0 z-50">
         {/* navbar goes here */}
-        <Navbar></Navbar>
+        {/* <Navbar></Navbar> */}
+        <NavbarAlt></NavbarAlt>
       </div>
       <div className="no-scrollbar overflow-y-auto">
         {/* sidebar goes here */}
