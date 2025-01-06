@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import CatCard from "@/components/CatCard";
-import DefaultLoader from "@/components/loader/deafult-loader";
+import DefaultLoader from "@/components/loader/default-loader";
 import { useGetUserByIdQuery } from "@/redux/user/userApi";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";

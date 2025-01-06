@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaCircleNotch } from 'react-icons/fa6';
-import SadCatIcon from '../SadCatIcon';
+import SadCatIcon from '../SadCatlcon';
 
 const DefaultLoader = () => {
     return (
